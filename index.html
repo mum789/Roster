@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roster Duty Portal</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <div class="nav-bar">
+    <h3 style="margin:0;">Roster Duty Portal</h3>
+    <div class="nav-btns">
+      <button onclick="switchView('user')">User Panel</button>
+      <button class="admin-btn" onclick="switchView('admin')">Admin Panel</button>
+    </div>
+  </div>
+
+  <!-- USER PANEL -->
+  <div class="container" id="userPanel">
+    <div class="panel-header">
+      <h2 id="panelTitleText">User Panel - Roster Duty Application</h2>
+      <p id="panelSubText" style="color: #64748b; font-size: 14px;">Fill in your details below and submit for Admin approval</p>
+    </div>
+
+    <div class="section-title">Roster Duty Detail:</div>
+    <div class="table-responsive">
+      <table class="input-table">
+        <thead>
+          <tr>
+            <th style="width: 18%;">Date of Duty</th>
+            <th style="width: 25%;">Name of Employee</th>
+            <th style="width: 15%;">Designation</th>
+            <th style="width: 22%;">Purpose of Duty</th>
+            <th style="width: 10%;">Amount</th>
+            <th style="width: 10%;">Signature</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input type="date" id="userDate"></td>
+            <td>
+              <select id="userName" onchange="updateDesignation()">
+                <option value="" disabled selected>Select Employee</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" id="userDesig" placeholder="Designation" readonly>
+            </td>
+            <td>
+              <select id="userPurpose" onchange="updateAmount()">
+                <option value="" disabled selected>Select Purpose</option>
+                <option value="Roster Duty">Roster Duty</option>
+                <option value="Roster Duty (Holiday)">Roster Duty (Holiday)</option>
+              </select>
+            </td>
+            <td><input type="number" id="userAmount" placeholder="Amount" readonly></td>
+            <td><input type="text" id="userSig" placeholder=""></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <button class="btn-submit" id="submitBtnElement" onclick="submitData()">Submit Application to Admin</button>
+    <button class="btn-cancel-edit" id="cancelEditBtn" onclick="cancelEditMode()">Cancel Edit</button>
+  </div>
+
+  <!-- ADMIN PANEL -->
+  <div class="container" id="adminPanel" style="display: none;">
+    <div class="panel-header">
+      <h2>Admin Control Panel</h2>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Main Division Header:</label>
+        <input type="text" id="mainDivision" value="Finance & Accounts Division">
+      </div>
+      <div class="form-group">
+        <label>Report Month & Year:</label>
+        <input type="text" id="reportMonth" value="Month of May 2026">
+      </div>
+      <div class="form-group">
+        <label>Summary Title Format:</label>
+        <input type="text" id="summaryTitleInput" value="June (01-30)'2026">
+      </div>
+      <div class="form-group">
+        <label>Division:</label>
+        <input type="text" id="subDivision" value="Information Technology Division">
+      </div>
+      <div class="form-group">
+        <label>Date of Submission:</label>
+        <input type="date" id="subDate">
+      </div>
+    </div>
+
+    <div class="section-title">Submitted User Applications:</div>
+    <div class="table-responsive">
+      <table class="input-table">
+        <thead>
+          <tr>
+            <th>Date of Duty</th>
+            <th>Name of Employee</th>
+            <th>Designation</th>
+            <th>Purpose of Duty</th>
+            <th>Amount</th>
+            <th>Signature</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="adminTableBody">
+          <!-- Submissions render here -->
+        </tbody>
+      </table>
+    </div>
+
+    <div style="margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+      <button class="btn-adduser" onclick="openAddUserModal()">Add New User</button>
+      <button class="btn-resetpass" onclick="openResetPasswordModal()">Reset Password</button>
+      <button class="btn-pdf" onclick="generateReportPDF()">Download Detailed PDF</button>
+      <button class="btn-summary" onclick="generateSummaryPDF()">Download Summary PDF</button>
+      <button class="btn-clear" onclick="clearAllData()">Clear All Submissions</button>
+    </div>
+  </div>
+
+  <!-- Admin Login Modal -->
+  <div id="adminLoginModal" class="modal">
+    <div class="modal-content">
+      <h3>Admin Authentication</h3>
+      <div class="modal-group">
+        <label>Enter Admin Password:</label>
+        <input type="password" id="loginPasswordInput" placeholder="Enter password">
+      </div>
+      <div class="modal-btns">
+        <button class="btn-confirm-login" onclick="verifyAdminLogin()">Login</button>
+        <button class="btn-cancel-login" onclick="closeAdminLoginModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add New User Modal -->
+  <div id="addUserModal" class="modal">
+    <div class="modal-content">
+      <h3>Add New Employee</h3>
+      <div class="modal-group">
+        <label>Employee Name:</label>
+        <input type="text" id="newEmpName" placeholder="Enter Full Name">
+      </div>
+      <div class="modal-group">
+        <label>Designation:</label>
+        <input type="text" id="newEmpDesig" placeholder="e.g. Officer, SO, AO">
+      </div>
+      <div class="modal-btns">
+        <button class="btn-save-user" onclick="saveNewUser()">Save User</button>
+        <button class="btn-close-modal" onclick="closeAddUserModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reset Password Modal -->
+  <div id="resetPasswordModal" class="modal">
+    <div class="modal-content">
+      <h3>Reset Admin Password</h3>
+      <div class="modal-group">
+        <label>Current Password:</label>
+        <input type="password" id="oldPassInput" placeholder="Enter Current Password">
+      </div>
+      <div class="modal-group">
+        <label>New Password:</label>
+        <input type="password" id="newPassInput" placeholder="Enter New Password">
+      </div>
+      <div class="modal-group">
+        <label>Confirm New Password:</label>
+        <input type="password" id="confirmPassInput" placeholder="Confirm New Password">
+      </div>
+      <div class="modal-btns">
+        <button class="btn-confirm-reset" onclick="saveNewPassword()">Update Password</button>
+        <button class="btn-cancel-reset" onclick="closeResetPasswordModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detailed PDF Output Template -->
+  <div id="pdf-template-wrapper">
+    <div id="pdf-render-area" class="pdf-page">
+      <div class="pdf-header">
+        <img src="assets/picture.jpg" alt="Bangladesh Bank Logo" class="pdf-logo">
+        <h2 id="pdf-out-main-div"></h2>
+        <h3>Allowance for Roster Duty Detail</h3>
+        <h4 id="pdf-out-month"></h4>
+      </div>
+
+      <table class="pdf-info-table">
+        <tr>
+          <td style="font-weight: bold; width: 25%;">Division :</td>
+          <td id="pdf-out-sub-div"></td>
+        </tr>
+        <tr>
+          <td style="font-weight: bold; width: 25%;">Date of Submission:</td>
+          <td id="pdf-out-sub-date"></td>
+        </tr>
+      </table>
+
+      <table class="pdf-data-table">
+        <thead>
+          <tr>
+            <th style="width: 14%;">Date of Duty</th>
+            <th style="width: 26%;">Name of the employee</th>
+            <th style="width: 12%;">Designation</th>
+            <th style="width: 24%;">Purpose of Duty</th>
+            <th style="width: 12%;">Amount</th>
+            <th style="width: 12%;">Signature of Attendee</th>
+          </tr>
+        </thead>
+        <tbody id="pdf-out-table-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Summary PDF Output Template -->
+  <div id="summary-pdf-wrapper">
+    <div id="summary-render-area" class="pdf-page">
+      <div class="pdf-header" style="margin-bottom: 8px;">
+        <img src="assets/picture.jpg" alt="Bangladesh Bank Logo" class="pdf-logo">
+        <h3 id="summary-out-title" style="font-size: 12px; font-weight: bold;">Summary of the allowances for Rostering Duty: June (01-30)'2026</h3>
+      </div>
+
+      <table class="pdf-data-table">
+        <thead>
+          <tr>
+            <th style="width: 5%;">SL</th>
+            <th style="width: 23%;">Name</th>
+            <th style="width: 11%;">Designation</th>
+            <th style="width: 22%;">Duty Dates</th>
+            <th style="width: 17%;">Amount</th>
+            <th style="width: 10%;">Total Amount</th>
+            <th style="width: 12%;">Signature</th>
+          </tr>
+        </thead>
+        <tbody id="summary-out-table-body"></tbody>
+      </table>
+
+      <!-- Signature & Approval Section -->
+      <div style="margin-top: 75px; font-size: 12px; font-family: 'Calibri', sans-serif; page-break-inside: avoid;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 40px;">
+          <div style="text-align: center; width: 140px;">
+            <div style="border-top: 1px solid #000; padding-top: 4px; font-weight: bold;">Prepared by</div>
+          </div>
+          <div style="text-align: center; width: 140px;">
+            <div style="border-top: 1px solid #000; padding-top: 4px; font-weight: bold;">Reviewed by</div>
+          </div>
+        </div>
+        <div style="display: flex; justify-content: center;">
+          <div style="text-align: center; width: 140px;">
+            <div style="border-top: 1px solid #000; padding-top: 10px; font-weight: bold;">Recommended by</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Supabase JS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <!-- Supabase Config -->
+  <script src="js/supabase-config.js"></script>
+  <!-- Main App -->
+  <script src="js/script.js"></script>
+</body>
+</html>

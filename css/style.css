@@ -1,0 +1,101 @@
+* { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+body { background-color: #f4f6f9; margin: 0; padding: 20px; }
+
+.nav-bar { max-width: 950px; margin: 0 auto 20px auto; display: flex; justify-content: space-between; align-items: center; background: #1e293b; padding: 10px 20px; border-radius: 8px; color: white; }
+.nav-btns button { background: #3b82f6; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; font-weight: bold; margin-left: 10px; }
+.nav-btns button.admin-btn { background: #10b981; }
+
+.container { max-width: 950px; margin: 0 auto; background: #ffffff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+.panel-header { border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; margin-bottom: 25px; text-align: center; }
+.panel-header h2 { margin: 0; color: #1e293b; font-size: 22px; }
+.section-title { font-size: 16px; font-weight: 700; color: #0f172a; margin-bottom: 15px; text-align: center; }
+
+.table-responsive { overflow-x: auto; }
+.input-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+.input-table th, .input-table td { 
+  border: 1px solid #cbd5e1; 
+  padding: 10px 8px; 
+  font-size: 10.5pt; 
+  font-family: 'Calibri', sans-serif;
+  text-align: center; 
+}
+.input-table th { background-color: #f1f5f9; color: #1e293b; font-weight: 700; }
+.input-table td input, .input-table td select { 
+  width: 100%; 
+  border: 1px solid #cbd5e1; 
+  border-radius: 5px; 
+  padding: 8px; 
+  font-size: 10.5pt; 
+  font-family: 'Calibri', sans-serif;
+  outline: none; 
+  background: white; 
+}
+.input-table td input:focus, .input-table td select:focus { border-color: #3b82f6; }
+.input-table td input[readonly] { background-color: #f1f5f9; cursor: not-allowed; }
+
+.btn-submit { background-color: #2563eb; color: white; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-size: 15px; font-weight: 600; width: 100%; transition: background-color 0.2s; }
+.btn-submit:hover { background-color: #1d4ed8; }
+.btn-cancel-edit { background-color: #64748b; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600; margin-top: 10px; width: 100%; display: none; }
+
+.form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+.form-group label { font-size: 13px; font-weight: bold; color: #475569; display: block; margin-bottom: 5px; }
+.form-group input { width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 5px; font-family: 'Calibri', sans-serif; font-size: 10.5pt; }
+
+.btn-pdf { background: #059669; color: white; border: none; padding: 10px 16px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+.btn-summary { background: #7c3aed; color: white; border: none; padding: 10px 16px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+.btn-adduser { background: #2563eb; color: white; border: none; padding: 10px 16px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+.btn-resetpass { background: #d97706; color: white; border: none; padding: 10px 16px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+.btn-clear { background: #dc2626; color: white; border: none; padding: 10px 16px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+
+/* Modal Styles */
+.modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); justify-content: center; align-items: center; }
+.modal-content { background: white; padding: 25px; border-radius: 10px; width: 350px; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+.modal-content h3 { margin-top: 0; color: #1e293b; font-size: 18px; margin-bottom: 15px; text-align: center; }
+.modal-group { margin-bottom: 15px; }
+.modal-group label { display: block; font-size: 13px; font-weight: bold; color: #475569; margin-bottom: 5px; }
+.modal-group input { width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 5px; font-size: 14px; }
+.modal-btns { display: flex; justify-content: space-between; gap: 10px; margin-top: 20px; }
+.btn-save-user, .btn-confirm-login, .btn-confirm-reset { background: #10b981; color: white; border: none; padding: 8px 16px; border-radius: 5px; font-weight: bold; cursor: pointer; flex: 1; }
+.btn-close-modal, .btn-cancel-login, .btn-cancel-reset { background: #64748b; color: white; border: none; padding: 8px 16px; border-radius: 5px; font-weight: bold; cursor: pointer; flex: 1; }
+
+#pdf-template-wrapper, #summary-pdf-wrapper { display: none; }
+
+.pdf-page { 
+  padding: 5px 15px 15px 5px; 
+  background: #ffffff; 
+  color: #000; 
+  font-family: Arial, sans-serif; 
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.pdf-header { text-align: center; margin-bottom: 6px; }
+.pdf-logo { height: 35px; width: auto; display: block; margin: 0 auto 4px auto; }
+.pdf-header h2 { margin: 0; font-size: 13px; }
+.pdf-header h3 { margin: 2px 0; font-size: 11px; }
+.pdf-header h4 { margin: 2px 0; font-size: 9.5pt; font-weight: bold; font-family: 'Calibri', sans-serif; }
+
+.pdf-info-table { width: 100%; border-collapse: collapse; border: 1px solid #000; margin-bottom: 6px; }
+.pdf-info-table td { border: 1px solid #000; padding: 2px 5px; font-size: 12px; font-family: 'Calibri', sans-serif; }
+
+.pdf-data-table { 
+  width: 100%; 
+  border-collapse: collapse; 
+  border: 1px solid #000 !important; 
+  margin-bottom: 10px; 
+}
+.pdf-data-table th, .pdf-data-table td { 
+  border: 1px solid #000 !important; 
+  padding: 2.5px 4px; 
+  font-size: 12px; 
+  font-family: 'Calibri', sans-serif; 
+  text-align: center; 
+}
+
+.pdf-total-row td { 
+  font-weight: bold !important; 
+  font-size: 12px !important; 
+  font-family: 'Calibri', sans-serif !important;
+  border: 1px solid #000 !important; 
+  background-color: #ffffff !important;
+}
