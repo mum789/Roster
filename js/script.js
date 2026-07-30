@@ -122,6 +122,22 @@ function updateAmount() {
     amountInput.value = '';
   }
 }
+function checkDutyDate() {
+  const dateValue = document.getElementById('userDate').value;
+
+  if (!dateValue) return;
+
+  const day = new Date(dateValue).getDay(); // Friday=5, Saturday=6
+  const purposeSelect = document.getElementById('userPurpose');
+
+  if (day === 5 || day === 6) {
+    purposeSelect.value = 'Roster Duty (Holiday)';
+  } else {
+    purposeSelect.value = 'Roster Duty';
+  }
+
+  updateAmount();
+}
 
 async function switchView(view) {
   if(view === 'admin') {
