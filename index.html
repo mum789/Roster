@@ -40,7 +40,9 @@
         </thead>
         <tbody>
           <tr>
-            <td><input type="date" id="userDate"></td>
+            <td>
+    <input type="date" id="userDate" onchange="checkDutyDate()">
+            </td>
             <td>
               <select id="userName" onchange="updateDesignation()">
                 <option value="" disabled selected>Select Employee</option>
